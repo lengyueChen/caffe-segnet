@@ -52,7 +52,7 @@ void SoftmaxWithLossLayer<Dtype>::LayerSetUp(
       
       // calculate class_weight frequency
       const Dtype* label = bottom[1]->cpu_data();
-      int label_data_size = bottom[1].count(); 
+      int label_data_size = bottom[1]->count(); 
       //assign class weighting
       for(int class_idx = 0; class_idx < this->layer_param_.loss_param().class_weighting_size(); class_idx++){
         int class_sum = 0;
