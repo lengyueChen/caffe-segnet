@@ -50,7 +50,7 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   // to avoid having to allocate additional GPU memory.
   Dtype* counts = prob_.mutable_gpu_diff();
   const float* label_count_data_c = weight_by_label_freqs_ ? label_counts_.gpu_data() : NULL;
-  float* label_count_data = label_count_data_c;
+  float label_count_data[bottom[0]->channels()] = *label_count_data_c;
   int label_data_size = bottom[1]->count();
 
   for(int class_idx = 0; class_idx < bottom[0]->channels(); class_idx++){
