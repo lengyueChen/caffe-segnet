@@ -48,7 +48,7 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   Dtype* loss_data = bottom[0]->mutable_gpu_diff();
   // Similarly, this memory is never used elsewhere, and thus we can use it
   // to avoid having to allocate additional GPU memory.
-  Dtype* counts = prob_.mutable_gpu_diff();i
+  Dtype* counts = prob_.mutable_gpu_diff();
   float label_count_data[bottom[0]->channels()] = {0.0};
   int label_data_size = bottom[1]->count();
 
