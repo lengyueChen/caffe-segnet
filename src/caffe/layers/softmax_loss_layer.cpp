@@ -61,8 +61,10 @@ void SoftmaxWithLossLayer<Dtype>::LayerSetUp(
               class_sum++;
 	    //  std::cout<<"class sum pass."<<std::endl;
             }
-            label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
+            //label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
         }
+	  label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
+
       }
     }
 }
