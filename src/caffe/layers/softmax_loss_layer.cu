@@ -84,7 +84,7 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
     top[1]->ShareData(prob_);
   }
  label_count_data=NULL;
- delete [] lable_count_data;
+ delete [] label_count_data;
 }
 
 template <typename Dtype>
