@@ -32,7 +32,7 @@ void SoftmaxWithLossLayer<Dtype>::LayerSetUp(
   weight_by_label_freqs_ =
     this->layer_param_.loss_param().weight_by_label_freqs();
   
-  /*
+  
   if (weight_by_label_freqs_) {
     vector<int> count_shape(1, this->layer_param_.loss_param().class_weighting_size());
     label_counts_.Reshape(count_shape);
@@ -42,34 +42,7 @@ void SoftmaxWithLossLayer<Dtype>::LayerSetUp(
     for (int i = 0; i < this->layer_param_.loss_param().class_weighting_size(); i++) {
         label_count_data[i] = this->layer_param_.loss_param().class_weighting(i);
     }
-  }*/
-    if(weight_by_label_freqs_){
-      vector<int> count_shape(1,this->layer_param_.loss_param().class_weighting_size());
-      label_counts_.Reshape(count_shape);
-      CHECK_EQ(this->layer_param_.loss_param().class_weighting_size(),bottom[0]->channels())
-      << "Number of class weight values does not match the number of classes." ;
-      float* label_count_data =  label_counts_.mutable_cpu_data();
-      
-      // calculate class_weight frequency
-      const Dtype* label = bottom[1]->cpu_data();
-      int label_data_size = bottom[1]->count(); 
-      //assign class weighting
-      for(int class_idx = 0; class_idx < this->layer_param_.loss_param().class_weighting_size(); class_idx++){
-        int class_sum = 0;
-        for( int j = 0 ; j < label_data_size; j++){
-            if(static_cast<int>(label[j]) == class_idx){
-                std::cout<<"pixel number for :"<<j<<" is "<<class_sum<<std::endl;
-                class_sum++;
-            }
-        }
-        label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
-      }
-      for(int class_idx = 0; class_idx < this->layer_param_.loss_param().class_weighting_size(); class_idx++){
-          std::cout<<"class:"<<class_idx<<"w = "<<label_count_data[class_idx]<<std::endl;
-      }
-
-    }
-}
+  }
 
 template <typename Dtype>
 void SoftmaxWithLossLayer<Dtype>::Reshape(
