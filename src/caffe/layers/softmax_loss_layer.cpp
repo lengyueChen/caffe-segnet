@@ -58,13 +58,14 @@ void SoftmaxWithLossLayer<Dtype>::LayerSetUp(
         int class_sum = 0;
         for( int j = 0 ; j < label_data_size; j++){
             if(static_cast<int>(label[j]) == class_idx){
+                std::cout<<"pixel number for :"<<j<<" is "<<class_sum<<std::endl;
                 class_sum++;
             }
         }
         label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
       }
       for(int class_idx = 0; class_idx < this->layer_param_.loss_param().class_weighting_size(); class_idx++){
-          std::cout<<"class:"<<class_idx<<"w=:"<<label_count_data[class_idx]<<std::endl;
+          std::cout<<"class:"<<class_idx<<"w = "<<label_count_data[class_idx]<<std::endl;
       }
 
     }
