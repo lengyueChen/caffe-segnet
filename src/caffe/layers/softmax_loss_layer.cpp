@@ -59,7 +59,7 @@ void SoftmaxWithLossLayer<Dtype>::LayerSetUp(
         for( int j = 0 ; j < label_data_size; j++){
             if(static_cast<int>(label[j]) == class_idx){
               class_sum++;
-	      CHECK_EQ(1)<<"class sum pass
+	      CHECK_EQ(1)<<"class sum pass.";
             }
             label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
         }
