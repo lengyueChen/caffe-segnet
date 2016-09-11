@@ -49,8 +49,21 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   // Similarly, this memory is never used elsewhere, and thus we can use it
   // to avoid having to allocate additional GPU memory.
   Dtype* counts = prob_.mutable_gpu_diff();
-  const float* label_count_data = 
-      weight_by_label_freqs_ ? label_counts_.gpu_data() : NULL;
+  float* label_count_data = label_counts_.mutable_gpu_data();
+  int label_data_size = bottom[1]->count();
+
+  for(int class_idx = 0; class_idx < bottom[0]->channels(); class_idx++){
+    int class_sum = 0;
+    for( int j = 0 ; j < label_data_size; j++){
+        if(static_cast<int>(label[j]) == class_idx){
+          class_sum++;
+        //std::cout<<"class sum pass."<<std::endl;
+        }
+    }
+    label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
+  }
+  
+
   // NOLINT_NEXT_LINE(whitespace/operators)
   SoftmaxLossForwardGPU<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
       CAFFE_CUDA_NUM_THREADS>>>(nthreads, prob_data, label, 
