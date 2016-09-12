@@ -39,7 +39,12 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
     const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
   softmax_layer_->Forward(softmax_bottom_vec_, softmax_top_vec_);
   const Dtype* prob_data = prob_.gpu_data();
+  
   const Dtype* label = bottom[1]->gpu_data();
+  int label_data_size = bottom[1]->count();
+  Dtype* label_host = new Dtype[label_data_size];
+  CUDA_CHECK(cudaMemcpy(label_host,label,label_data_size,cudaMemcpyDeviceToHost));
+
   const int dim = prob_.count() / outer_num_;
   const int nthreads = outer_num_ * inner_num_;
   // Since this memory is not used for anything until it is overwritten
@@ -49,26 +54,40 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   // Similarly, this memory is never used elsewhere, and thus we can use it
   // to avoid having to allocate additional GPU memory.
   Dtype* counts = prob_.mutable_gpu_diff();
-  float* label_count_data =  new float[bottom[0]->channels()] ;
-  int label_data_size = bottom[1]->count();
-
-  for(int class_idx = 0; class_idx < bottom[0]->channels(); class_idx++){
-    int class_sum = 0;
-    for( int j = 0 ; j < label_data_size; j++){
-        if(static_cast<int>(label[j]) == class_idx){
-          class_sum++;
-        //std::cout<<"class sum pass."<<std::endl;
-        }
-    }
-    label_count_data[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
-  }
   
+  std::cout<<"Reach here"<<std::endl;
+  const float* label_count_data = label_counts_.gpu_data();
+  int class_num = bottom[0]->channels();
+  float* label_count_host = new float[class_num];
+  CUDA_CHECK(cudaMemcpy(label_count_host,label_count_data,class_num,cudaMemcpyDeviceToHost));
+  //std::cout<<"label_count_host[0]:"<< label_count_host[0] <<std::endl;
+  //std::cout<<"label_data_size: "<< label_data_size<<std::endl;
+  //std::cout<<"bottom[0]->channel: "<< bottom[0]->channels()<<std::endl;
+  
+  for(int class_idx = 0; class_idx < class_num; class_idx++){
+    int class_sum = 0;
+     std::cout<<"Inner Loop"<<std::endl;
+    for(int j = 0 ; j < label_data_size; j++){
+        //std::cout<<"Find bug?"<<std::endl;
+        //std::cout<< label <<std::endl;
+        if(static_cast<int>(label_host[j]) == class_idx)
+            class_sum++;
+        //std::cout<<"class sum pass."<<std::endl;
+    }
+    label_count_host[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
+  }
+ CUDA_CHECK(cudaMemcpy((void *)label_count_data,label_count_host,class_num,cudaMemcpyHostToDevice));
 
+ delete [] label_count_host;
+ delete [] label_host;
+ label_host=NULL;
+ label_count_host = NULL;
+ std::cout<<"Reach end of loop"<<std::endl;
   // NOLINT_NEXT_LINE(whitespace/operators)
   SoftmaxLossForwardGPU<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
-      CAFFE_CUDA_NUM_THREADS>>>(nthreads, prob_data, label, 
-      weight_by_label_freqs_, label_count_data , loss_data, 
-      outer_num_, dim, inner_num_, 
+      CAFFE_CUDA_NUM_THREADS>>>(nthreads, prob_data, label,
+      weight_by_label_freqs_, label_count_data , loss_data,
+      outer_num_, dim, inner_num_,
       has_ignore_label_, ignore_label_, counts);
   Dtype loss;
   caffe_gpu_asum(nthreads, loss_data, &loss);
@@ -77,14 +96,12 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
     caffe_gpu_asum(nthreads, counts, &count);
     loss /= count;
   } else {
-    loss /= outer_num_;
+  loss /= outer_num_;
   }
   top[0]->mutable_cpu_data()[0] = loss;
   if (top.size() == 2) {
     top[1]->ShareData(prob_);
   }
- label_count_data=NULL;
- delete [] label_count_data;
 }
 
 template <typename Dtype>
