@@ -54,25 +54,17 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   // Similarly, this memory is never used elsewhere, and thus we can use it
   // to avoid having to allocate additional GPU memory.
   Dtype* counts = prob_.mutable_gpu_diff();
-  
-  std::cout<<"Reach here"<<std::endl;
+  //add realtime weighted loss here:
   const float* label_count_data = label_counts_.gpu_data();
   int class_num = bottom[0]->channels();
   float* label_count_host = new float[class_num];
   CUDA_CHECK(cudaMemcpy(label_count_host,label_count_data,class_num,cudaMemcpyDeviceToHost));
-  //std::cout<<"label_count_host[0]:"<< label_count_host[0] <<std::endl;
-  //std::cout<<"label_data_size: "<< label_data_size<<std::endl;
-  //std::cout<<"bottom[0]->channel: "<< bottom[0]->channels()<<std::endl;
   
   for(int class_idx = 0; class_idx < class_num; class_idx++){
     int class_sum = 0;
-     std::cout<<"Inner Loop"<<std::endl;
     for(int j = 0 ; j < label_data_size; j++){
-        //std::cout<<"Find bug?"<<std::endl;
-        //std::cout<< label <<std::endl;
         if(static_cast<int>(label_host[j]) == class_idx)
             class_sum++;
-        //std::cout<<"class sum pass."<<std::endl;
     }
     label_count_host[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
   }
