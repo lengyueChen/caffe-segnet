@@ -74,7 +74,6 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
  delete [] label_host;
  label_host=NULL;
  label_count_host = NULL;
- std::cout<<"Reach end of loop"<<std::endl;
   // NOLINT_NEXT_LINE(whitespace/operators)
   SoftmaxLossForwardGPU<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
       CAFFE_CUDA_NUM_THREADS>>>(nthreads, prob_data, label,
