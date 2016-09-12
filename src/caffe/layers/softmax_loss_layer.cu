@@ -66,7 +66,7 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
         if(static_cast<int>(label_host[j]) == class_idx)
             class_sum++;
     }
-    label_count_host[class_idx] = static_cast< float >(class_sum) / static_cast< float >(label_data_size);
+    label_count_host[class_idx] = 1.0 - static_cast< float >(class_sum) / static_cast< float >(label_data_size);
   }
  CUDA_CHECK(cudaMemcpy((void *)label_count_data,label_count_host,class_num,cudaMemcpyHostToDevice));
 
