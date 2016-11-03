@@ -78,8 +78,8 @@ TYPED_TEST(IntersectionOverUnionLayerTest, TestForward){
        
                 
                 image 1:
-                class1  [0      1]
-                        [2      2]
+                class1  [2      1]
+                        [0      0]
                 
              
 -------------------------------------
