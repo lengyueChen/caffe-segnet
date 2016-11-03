@@ -52,7 +52,7 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 		for(int n = 0; n < num; n++){
 			for(int i = 0; i < height*width;i++){ 
 				const int idx = i+n*height*width;
-				if(bottom_data[idx]== bottom_label[idx]){
+				if( bottom_data[idx] == bottom_label[idx] &&bottom_data[idx]==class_idx ) {
 					C_i++;
 				}
 				if(bottom_label[idx] == class_idx ){
