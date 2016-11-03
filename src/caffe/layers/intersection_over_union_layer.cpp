@@ -123,7 +123,7 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 		//std::cout << "C_i:"<< C_i <<std::endl;
 		//std::cout << "G_i: "<< G_i <<std::endl;
 		//std::cout << "P_i: "<< P_i <<"\n"<<std::endl;
-		
+		std::cout<<"fwd class :"<< class_idx <<std::endl;
 		std::cout<<"C_i: "<<C_i<<std::endl;
 		std::cout<<"G_i: "<<G_i<<std::endl;
 		std::cout<<"P_i: "<<P_i<<std::endl;
@@ -208,7 +208,7 @@ void IntersectionOverUnionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>&
 					}
                 }
                 
-                std::cout<<"class :"<< class_idx <<std::endl;
+                std::cout<<"bwd class :"<< class_idx <<std::endl;
 				std::cout<<"C_i "<< C_i<<std::endl;
 				std::cout<<"G_i "<< G_i<<std::endl;
 				std::cout<<"P_i "<< P_i<<std::endl;
@@ -237,7 +237,7 @@ void IntersectionOverUnionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>&
                 }
         }
 
-        std::cout<<"done"<<std::endl;
+        
         //test
         std::cout<<bottom_diff[0]<<std::endl;
         std::cout<<bottom_diff[1]<<std::endl;
