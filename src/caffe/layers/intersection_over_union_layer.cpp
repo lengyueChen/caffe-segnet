@@ -70,7 +70,7 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 				}
 			}       
 		}
-		
+
 
 
 		// for(int n = 0; n < num; n++){
@@ -124,10 +124,16 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 		//std::cout << "G_i: "<< G_i <<std::endl;
 		//std::cout << "P_i: "<< P_i <<"\n"<<std::endl;
 		
+		cout<<"C_i: "<<C_i<<endl;
+		cout<<"G_i: "<<G_i<<endl;
+		cout<<"P_i: "<<P_i<<endl;
+
 		IUscore +=  (float)C_i/(G_i + P_i - C_i);
+		cout<<"IUscore: "<<IUscore<<endl;
 	}
 	
 	top_data[0] = IUscore / num_class;
+
 	//std::cout<<top_data[0]<<std::endl;
 }
 
