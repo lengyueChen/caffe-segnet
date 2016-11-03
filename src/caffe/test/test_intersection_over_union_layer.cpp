@@ -16,8 +16,8 @@ template <typename Dtype>
 class IntersectionOverUnionLayerTest : public CPUDeviceTest<Dtype>{
 protected:
 	IntersectionOverUnionLayerTest()
-	:	blob_bottom_data_(new Blob<Dtype>(1,1,2,2)),
-		blob_bottom_label_(new Blob<Dtype>(1,1,2,2)),
+	:	blob_bottom_data_(new Blob<Dtype>(2,1,2,2)),
+		blob_bottom_label_(new Blob<Dtype>(2,1,2,2)),
 		blob_top_(new Blob<Dtype>(1,1,1,1)){
 		//fill values	
 		FillerParameter filler_param;
@@ -51,12 +51,12 @@ TYPED_TEST(IntersectionOverUnionLayerTest, TestSetup) {
   
   layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
   // check bottom[0]
-  EXPECT_EQ(this->blob_bottom_data_->num(),1);
+  EXPECT_EQ(this->blob_bottom_data_->num(),2);
   EXPECT_EQ(this->blob_bottom_data_->channels(),1);  
   EXPECT_EQ(this->blob_bottom_data_->height(),2);
   EXPECT_EQ(this->blob_bottom_data_->width(),2);
   //check bottom[1]
-  EXPECT_EQ(this->blob_bottom_label_->num(),1);
+  EXPECT_EQ(this->blob_bottom_label_->num(),2);
   EXPECT_EQ(this->blob_bottom_label_->channels(),1);
   EXPECT_EQ(this->blob_bottom_label_->height(),2);
   EXPECT_EQ(this->blob_bottom_label_->width(),2);
@@ -71,19 +71,19 @@ TYPED_TEST(IntersectionOverUnionLayerTest, TestSetup) {
 TYPED_TEST(IntersectionOverUnionLayerTest, TestForward){
 	LayerParameter layer_param;
 	IntersectionOverUnionLayer<TypeParam> layer(layer_param);
-        /* Input : prediction 2*3*2*2
+  /* Prediction
                 image 0: 
                 class1  [2      2]
                         [1      1]
        
                 
                 image 1:
-                class1  [2      1]
-                        [0      0]
+                class1  [0      1]
+                        [2      1]
                 
              
 -------------------------------------
-                Input :  ground truth 2*1*2*2
+    Ground truth :  
                 image 0:
                                 [2          1]
                                 [0          0]
@@ -93,40 +93,34 @@ TYPED_TEST(IntersectionOverUnionLayerTest, TestForward){
 
 		
 	*/
-	
+	/*-----Prediction-------*/
 	//image 0
-	
-
   this->blob_bottom_data_->mutable_cpu_data()[0] = 2;
   this->blob_bottom_data_->mutable_cpu_data()[1] = 2;
   this->blob_bottom_data_->mutable_cpu_data()[2] = 1;
   this->blob_bottom_data_->mutable_cpu_data()[3] = 1;
 
-
-        //image 1
-        //class 0
-        // this->blob_bottom_data_->mutable_cpu_data()[4] = 3;
-        // this->blob_bottom_data_->mutable_cpu_data()[5] = 1;
-        // this->blob_bottom_data_->mutable_cpu_data()[6] = 2;
-        // this->blob_bottom_data_->mutable_cpu_data()[7] = 2;
+  //image 1        
+  this->blob_bottom_data_->mutable_cpu_data()[4] = 0;
+  this->blob_bottom_data_->mutable_cpu_data()[5] = 1;
+  this->blob_bottom_data_->mutable_cpu_data()[6] = 2;
+  this->blob_bottom_data_->mutable_cpu_data()[7] = 1;
 
 
-        //label
-        //image 0
+  /*-----Ground truth-------*/
+  //image 0
   this->blob_bottom_label_->mutable_cpu_data()[0]= 2;
   this->blob_bottom_label_->mutable_cpu_data()[1]= 1;
   this->blob_bottom_label_->mutable_cpu_data()[2]= 0;
   this->blob_bottom_label_->mutable_cpu_data()[3]= 0;
-        //image 1
-        // this->blob_bottom_label_->mutable_cpu_data()[4]= 3;
-        // this->blob_bottom_label_->mutable_cpu_data()[5]= 1;
-        // this->blob_bottom_label_->mutable_cpu_data()[6]= 2;
-        // this->blob_bottom_label_->mutable_cpu_data()[7]= 3;
-	//image 1
-
-    
-
+  //image 1
+  this->blob_bottom_label_->mutable_cpu_data()[4]= 0;
+  this->blob_bottom_label_->mutable_cpu_data()[5]= 1;
+  this->blob_bottom_label_->mutable_cpu_data()[6]= 2;
+  this->blob_bottom_label_->mutable_cpu_data()[7]= 0;
 	
+
+  	
 	//Forward test
 	layer.Forward(this->blob_bottom_vec_,this->blob_top_vec_);
 	
@@ -142,7 +136,7 @@ TYPED_TEST(IntersectionOverUnionLayerTest, TestForward){
 TYPED_TEST(IntersectionOverUnionLayerTest, TestBackward){
         LayerParameter layer_param;
         IntersectionOverUnionLayer<TypeParam> layer(layer_param);
-        /* Input : prediction 2*3*2*2
+/* Prediction
                 image 0: 
                 class1  [2      2]
                         [1      1]
@@ -150,47 +144,45 @@ TYPED_TEST(IntersectionOverUnionLayerTest, TestBackward){
                 
                 image 1:
                 class1  [0      1]
-						            [2      2]
+                        [2      1]
                 
              
 -------------------------------------
-                Input :  ground truth 2*1*2*2
+    Ground truth :  
                 image 0:
                                 [2          1]
                                 [0          0]
                 image 1: 
                                 [0          1]
                                 [2          0]
-                
-        */
-        
-		//image 0
 
-        this->blob_bottom_data_->mutable_cpu_data()[0] = 2;
-        this->blob_bottom_data_->mutable_cpu_data()[1] = 2;
-        this->blob_bottom_data_->mutable_cpu_data()[2] = 1;
-        this->blob_bottom_data_->mutable_cpu_data()[3] = 1;
+    
+  */
+  /*-----Prediction-------*/
+  //image 0
+  this->blob_bottom_data_->mutable_cpu_data()[0] = 2;
+  this->blob_bottom_data_->mutable_cpu_data()[1] = 2;
+  this->blob_bottom_data_->mutable_cpu_data()[2] = 1;
+  this->blob_bottom_data_->mutable_cpu_data()[3] = 1;
 
-
-        //image 1
-        //class 0
-        // this->blob_bottom_data_->mutable_cpu_data()[4] = 3;
-        // this->blob_bottom_data_->mutable_cpu_data()[5] = 1;
-        // this->blob_bottom_data_->mutable_cpu_data()[6] = 2;
-        // this->blob_bottom_data_->mutable_cpu_data()[7] = 2;
+  //image 1        
+  this->blob_bottom_data_->mutable_cpu_data()[4] = 0;
+  this->blob_bottom_data_->mutable_cpu_data()[5] = 1;
+  this->blob_bottom_data_->mutable_cpu_data()[6] = 2;
+  this->blob_bottom_data_->mutable_cpu_data()[7] = 1;
 
 
-        //label
-        //image 0
-        this->blob_bottom_label_->mutable_cpu_data()[0]= 2;
-        this->blob_bottom_label_->mutable_cpu_data()[1]= 1;
-        this->blob_bottom_label_->mutable_cpu_data()[2]= 0;
-        this->blob_bottom_label_->mutable_cpu_data()[3]= 0;
-        //image 1
-        // this->blob_bottom_label_->mutable_cpu_data()[4]= 3;
-        // this->blob_bottom_label_->mutable_cpu_data()[5]= 1;
-        // this->blob_bottom_label_->mutable_cpu_data()[6]= 2;
-        // this->blob_bottom_label_->mutable_cpu_data()[7]= 3;
+  /*-----Ground truth-------*/
+  //image 0
+  this->blob_bottom_label_->mutable_cpu_data()[0]= 2;
+  this->blob_bottom_label_->mutable_cpu_data()[1]= 1;
+  this->blob_bottom_label_->mutable_cpu_data()[2]= 0;
+  this->blob_bottom_label_->mutable_cpu_data()[3]= 0;
+  //image 1
+  this->blob_bottom_label_->mutable_cpu_data()[4]= 0;
+  this->blob_bottom_label_->mutable_cpu_data()[5]= 1;
+  this->blob_bottom_label_->mutable_cpu_data()[6]= 2;
+  this->blob_bottom_label_->mutable_cpu_data()[7]= 0;
 
 
 
