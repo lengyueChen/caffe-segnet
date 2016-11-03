@@ -269,7 +269,7 @@ message ParamSpec {
 // NOTE
 // Update the next available ID when you add a new LayerParameter field.
 //
-// LayerParameter next available layer-specific ID: 139 (last added: dense_image_data_param)
+// LayerParameter next available layer-specific ID: 140 (last added: dense_image_data_param)
 message LayerParameter {
   optional string name = 1; // the layer name
   optional string type = 2; // the layer type
@@ -354,6 +354,8 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional UpsampleParameter upsample_param = 137;
   optional WindowDataParameter window_data_param = 129;
+  optional IntersectionOverUnionParameter intersection_over_union_param = 139;
+
 }
 
 // Message that stores parameters used to apply transformation
@@ -510,6 +512,12 @@ message DataParameter {
   // Force the encoded image to have 3 color channels
   optional bool force_encoded_color = 9 [default = false];
 }
+
+message IntersectionOverUnionParameter {
+  optional int32 num_class = 1 [default = 3];
+
+}
+
 
 message DenseImageDataParameter {
   // Specify the data source file.
