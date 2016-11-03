@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cstdio>
 
-#include "caffe//intersection_over_union_layer.hpp"
+#include "caffe/intersection_over_union_layer.hpp"
 #include "caffe/util/math_functions.hpp"
 
 
