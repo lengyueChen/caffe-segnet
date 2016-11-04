@@ -74,7 +74,8 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 		std::cout<<"IUscore: "<<IUscore<<std::endl;
 	}
 	
-	top_data[0] = IUscore / num_class;
+	top_data[0] = 1 - IUscore / num_class;
+
 	std::cout<<top_data[0]<<std::endl;
 }
 
@@ -157,9 +158,10 @@ void IntersectionOverUnionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>&
 				std::cout<<"G_i "<< G_i<<std::endl;
 				std::cout<<"P_i "<< P_i<<std::endl;
 
+
 				double gradient_C_i_constant = (double)((G_i + P_i - 2*C_i));
-                double gradient_C_i =  gradient_C_i_constant/((double)(pow(gradient_C_i_constant+C_i,2)));
-                double gradient_G_i_P_i = (-1)*C_i/((double)(pow(G_i + P_i - C_i,2)));
+                double gradient_C_i =  (-1)*gradient_C_i_constant/((double)(pow(gradient_C_i_constant+C_i,2)));
+                double gradient_G_i_P_i = C_i/((double)(pow(G_i + P_i - C_i,2)));
 
                 std::cout<<"gradient_C_i_constant "<< gradient_C_i_constant<<std::endl;
                 std::cout<<"gradient_C_i "<< gradient_C_i<<std::endl;
@@ -169,20 +171,20 @@ void IntersectionOverUnionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>&
                 for(int i = 0;i < ii.size();i++){
                         int idx = ii[i];
                         std::cout<<idx<<std::endl;
-                        bottom_diff[idx] = gradient_C_i;
+                        bottom_diff[idx] += gradient_C_i;
                 }
                 std::cout<<"gradient_G_i_P_i (ij) : "<<gradient_G_i_P_i <<std::endl;
                 for(int i = 0;i < ij.size();i++){
                         int idx = ij[i];
                         std::cout<<idx<<std::endl;
-                        bottom_diff[idx] = gradient_G_i_P_i;
+                        bottom_diff[idx] += gradient_G_i_P_i;
                 }
 
                 std::cout<<"gradient_G_i_P_i (ji): "<<gradient_G_i_P_i <<std::endl;
                 for(int i = 0;i < ji.size();i++){
                         int idx = ji[i];
                         std::cout<<idx<<std::endl;
-                        bottom_diff[idx] = gradient_G_i_P_i;
+                        bottom_diff[idx] += gradient_G_i_P_i;
                 }
         }
 
