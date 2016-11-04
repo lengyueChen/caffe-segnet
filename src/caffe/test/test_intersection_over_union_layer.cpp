@@ -184,11 +184,9 @@ TYPED_TEST(IntersectionOverUnionLayerTest, TestBackward){
   this->blob_bottom_label_->mutable_cpu_data()[6]= 2;
   this->blob_bottom_label_->mutable_cpu_data()[7]= 0;
 
-
-
         //Backward test
-        vector<bool> propagate_down;
-        layer.Backward(this->blob_top_vec_,propagate_down,this->blob_bottom_vec_);
+  vector<bool> propagate_down;
+  layer.Backward(this->blob_top_vec_,propagate_down,this->blob_bottom_vec_);
 
          /* Expected output: 
 
