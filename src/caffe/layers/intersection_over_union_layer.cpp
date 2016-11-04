@@ -162,18 +162,23 @@ void IntersectionOverUnionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>&
                 std::cout<<"gradient_C_i "<< gradient_C_i<<std::endl;
                 std::cout<<"gradient_gradient_G_i_P_iC_i_constant "<<gradient_G_i_P_i <<std::endl;
 
+                std::cout<<"gradient_C_i  : "<<gradient_C_i <<std::endl;
                 for(int i = 0;i < ii.size();i++){
                         int idx = ii[i];
+                        std::cout<<idx<<std::endl;
                         bottom_diff[idx] = gradient_C_i;
                 }
-
+                std::cout<<"gradient_G_i_P_i (ij) : "<<gradient_G_i_P_i <<std::endl;
                 for(int i = 0;i < ij.size();i++){
                         int idx = ij[i];
+                        std::cout<<idx<<std::endl;
                         bottom_diff[idx] = gradient_G_i_P_i;
                 }
 
+                std::cout<<"gradient_G_i_P_i (ji): "<<gradient_G_i_P_i <<std::endl;
                 for(int i = 0;i < ji.size();i++){
                         int idx = ji[i];
+                        std::cout<<idx<<std::endl;
                         bottom_diff[idx] = gradient_G_i_P_i;
                 }
         }
