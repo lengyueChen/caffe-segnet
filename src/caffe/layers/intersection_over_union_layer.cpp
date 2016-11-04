@@ -64,6 +64,7 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 			}       
 		}
 
+		
 		std::cout<<"fwd class :"<< class_idx <<std::endl;
 		std::cout<<"C_i: "<<C_i<<std::endl;
 		std::cout<<"G_i: "<<G_i<<std::endl;
@@ -74,7 +75,6 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 	}
 	
 	top_data[0] = IUscore / num_class;
-
 	std::cout<<top_data[0]<<std::endl;
 }
 
@@ -178,12 +178,16 @@ void IntersectionOverUnionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>&
                 }
         }
 
-        
         //test
         std::cout<<bottom_diff[0]<<std::endl;
         std::cout<<bottom_diff[1]<<std::endl;
         std::cout<<bottom_diff[2]<<std::endl;
+        std::cout<<bottom_diff[3]<<std::endl;
         std::cout<<bottom_diff[4]<<std::endl;
+		std::cout<<bottom_diff[5]<<std::endl;
+		std::cout<<bottom_diff[6]<<std::endl;
+		std::cout<<bottom_diff[7]<<std::endl;
+
 }
 
 
