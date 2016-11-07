@@ -18,6 +18,13 @@
 #include "caffe/vision_layers.hpp"
 
 namespace caffe{
+
+template <typename Dtype>
+void IntersectionOverUnionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top){
+	
+}
+
 template <typename Dtype>
 void IntersectionOverUnionLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top){
