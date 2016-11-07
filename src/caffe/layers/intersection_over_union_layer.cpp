@@ -5,8 +5,10 @@
 #include <iostream>
 #include <cstdio>
 
-#include "caffe/intersection_over_union_layer.hpp"
+//#include "caffe/intersection_over_union_layer.hpp"
 #include "caffe/util/math_functions.hpp"
+#include "caffe/vision_layers.hpp"
+#include "caffe/layer.hpp"
 
 
 namespace caffe{
@@ -73,8 +75,9 @@ void IntersectionOverUnionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& 
 		std::cout<<"IUscore: "<<IUscore<<std::endl;
 	}
 	
+	std::cout<<"FWD DEBUG1" <<std::endl;
 	*top_data = 1 - IUscore / num_class;
-
+	std::cout<<"FWD DEBUG2" <<std::endl;
 	std::cout<<*top_data<<std::endl;
 }
 
