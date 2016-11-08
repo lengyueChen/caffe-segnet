@@ -680,7 +680,14 @@ class IntersectionOverUnionLayer : public LossLayer<Dtype> {
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 
+  
+  
+  shared_ptr<Layer<Dtype> > Iintersection_over_union_layer_;
+  vector<Blob<Dtype>*> intersection_over_union_bottom_vec_;
+
+  vector<Blob<Dtype>*> intersection_over_union_top_vec_;
 };
+
 
 
 

@@ -22,7 +22,41 @@ namespace caffe{
 template <typename Dtype>
 void IntersectionOverUnionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top){
-	
+	  LossLayer<Dtype>::LayerSetUp(bottom, top);
+
+  LayerParameter intersection_over_union_param(this->layer_param_);
+
+  intersection_over_union_param.set_type("IntersectionOverUnion");
+
+  intersection_over_union_layer_ = LayerRegistry<Dtype>::CreateLayer(intersection_over_union_param);
+
+  intersection_over_union_bottom_vec_.clear();
+  //softmax_bottom_vec_.push_back(bottom[0]);
+  intersection_over_union_top_vec_.clear();
+  //softmax_top_vec_.push_back(&prob_);
+  intersection_over_union_layer_->SetUp(softmax_bottom_vec_, softmax_top_vec_);
+
+  // has_ignore_label_ =
+  //   this->layer_param_.loss_param().has_ignore_label();
+  // if (has_ignore_label_) {
+  //   ignore_label_ = this->layer_param_.loss_param().ignore_label();
+  // }
+  // normalize_ = this->layer_param_.loss_param().normalize();
+  // weight_by_label_freqs_ =
+  //   this->layer_param_.loss_param().weight_by_label_freqs();
+  
+  // if (weight_by_label_freqs_) {
+  //   vector<int> count_shape(1, this->layer_param_.loss_param().class_weighting_size());
+  //   label_counts_.Reshape(count_shape);
+  //   CHECK_EQ(this->layer_param_.loss_param().class_weighting_size(), bottom[0]->channels())
+		// << "Number of class weight values does not match the number of classes.";
+  //   float* label_count_data = label_counts_.mutable_cpu_data();
+  //   for (int i = 0; i < this->layer_param_.loss_param().class_weighting_size(); i++) {
+  //       label_count_data[i] = this->layer_param_.loss_param().class_weighting(i);
+  //   }
+  // }
+  
+
 }
 
 template <typename Dtype>
