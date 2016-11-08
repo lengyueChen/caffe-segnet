@@ -682,7 +682,7 @@ class IntersectionOverUnionLayer : public LossLayer<Dtype> {
 
   
   
-  shared_ptr<Layer<Dtype> > Iintersection_over_union_layer_;
+  shared_ptr<Layer<Dtype> > intersection_over_union_layer_;
   vector<Blob<Dtype>*> intersection_over_union_bottom_vec_;
 
   vector<Blob<Dtype>*> intersection_over_union_top_vec_;
