@@ -31,8 +31,11 @@ void IntersectionOverUnionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& b
   intersection_over_union_layer_ = LayerRegistry<Dtype>::CreateLayer(intersection_over_union_param);
 
   intersection_over_union_bottom_vec_.clear();
+  softmax_bottom_vec_.push_back(bottom[0]);
+  softmax_bottom_vec_.push_back(bottom[1]);
   //softmax_bottom_vec_.push_back(bottom[0]);
   intersection_over_union_top_vec_.clear();
+  intersection_over_union_top_vec_.push_back(&iou_score_);
   //softmax_top_vec_.push_back(&prob_);
   intersection_over_union_layer_->SetUp(intersection_over_union_bottom_vec_, intersection_over_union_top_vec_);
 
@@ -55,7 +58,7 @@ void IntersectionOverUnionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& b
   //       label_count_data[i] = this->layer_param_.loss_param().class_weighting(i);
   //   }
   // }
-  
+
 
 }
 

@@ -34,6 +34,7 @@ protected:
 		delete blob_bottom_label_;
 		delete blob_top_;
 	}
+  
 	Blob<Dtype>* const blob_bottom_data_;
   	Blob<Dtype>* const blob_bottom_label_;
   	Blob<Dtype>* const blob_top_;
