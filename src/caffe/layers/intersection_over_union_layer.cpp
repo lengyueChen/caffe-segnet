@@ -34,7 +34,7 @@ void IntersectionOverUnionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& b
   //softmax_bottom_vec_.push_back(bottom[0]);
   intersection_over_union_top_vec_.clear();
   //softmax_top_vec_.push_back(&prob_);
-  intersection_over_union_layer_->SetUp(softmax_bottom_vec_, softmax_top_vec_);
+  intersection_over_union_layer_->SetUp(intersection_over_union_bottom_vec_, intersection_over_union_top_vec_);
 
   // has_ignore_label_ =
   //   this->layer_param_.loss_param().has_ignore_label();
